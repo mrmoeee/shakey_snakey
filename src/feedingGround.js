@@ -12,7 +12,14 @@ class FeedingGround {
     ];
     this.width = width;
     this.height = height;
+    this.playing = true;
+  }
 
+  generateGrounds() {
+    this.grounds = new Array(this.width/20);
+    for(let i = 0; i < this.width/20; i++) {
+      this.feedingGround[i] = new Array(this.width/20);
+    }
   }
 
   randomSpawn() {
@@ -24,6 +31,15 @@ class FeedingGround {
     this.snake.y = row;
   }
 
+  foodGenerator() {
+    let randomNum1 = Math.floor(Math.random() * this.snakeFood.length);
+    let randomNum2 = Math.floor(Math.random() * this.snakeFood.length);
+    let randomNum3 = Math.floor(Math.random() * this.snakeFood.length);
+    this.spawnFood(this.snakeFood[randomNum1]);
+    this.spawnFood(this.snakeFood[randomNum2]);
+    this.spawnFood(this.snakeFood[randomNum3]);
+  }
+
   spawnFood(food) {
     const boundsW = Math.floor(this.width/20);
     const boundsH = Math.floor(this.height/20);
@@ -31,12 +47,6 @@ class FeedingGround {
     let row = Math.floor(Math.random() * boundsH);
     food.x = col;
     food.y = row;
-  }
-  generateGrounds() {
-    this.grounds = new Array(this.width/20);
-    for(let i = 0; i < this.width/20; i++) {
-      this.feedingGround[i] = new Array(this.width/20);
-    }
   }
 
   wallCollision(width) {
@@ -56,7 +66,7 @@ class FeedingGround {
 
   foodCollision(food) {
     let rect1 = this.snake;
-    let rect2 = this.food;
+    let rect2 = food;
     if ((((rect2.x > rect1.x)
         && (rect2.x < (rect1.x + rect1.width)))
         || (((rect2.x + rect2.width) > rect1.x)
@@ -70,35 +80,41 @@ class FeedingGround {
       return true;
     }
   }
-  foodGenerator() {
-    let randomNum1 = Math.floor(Math.random() * this.snakeFood.length());
-    let randomNum2 = Math.floor(Math.random() * this.snakeFood.length());
-    let randomNum3 = Math.floor(Math.random() * this.snakeFood.length());
-    this.spawnFood(this.snakeFood[randomNum1]);
-    this.spawnFood(this.snakeFood[randomNum2]);
-    this.spawnFood(this.snakeFood[randomNum3]);
-  }
 
   setup() {
     this.randomSpawn();
-    this.foodGenerator();
+    this.spawnFood(this.snakeFood[0]);
   }
 
   start(canvas) {
+    console.log('start');
     const ctx = canvas.getContext('2d');
-    let playing = true;
+
+    this.setup();
     const startAnimation = () => {
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      if (playing) {
-        setTimeout(startAnimation, 1000,10);
+      //width same as height so only pass in widght right now
+      if (this.wallCollision(canvas.width)) {
+        this.playing = !this.playing;
+        console.log('wall collision');
+      }
+      if (this.foodCollision(this.snakeFood[0])) {
+        let randomNum1 = Math.floor(Math.random() * this.snakeFood.length);
+        this.snake.size++;
+        this.spawnFood(this.snakeFood[randomNum1]);
+      }
+      this.render(ctx);
+      if (this.playing) {
+        setTimeout(startAnimation, 100);
       }
     };
-
+    startAnimation();
   }
 
   render(ctx) {
+    this.snake.show(ctx);
+    this.snake.update();
   }
 }
 

@@ -37,7 +37,8 @@ class Snake {
       ctx.fillRect(currTail.x * this.scl, currTail.y *
         this.scl, this.scl, this.scl);
     }
-    ctx.fillStyle = '#00b273';
+    // ctx.fillStyle = '#00b273';
+    ctx.fillStyle = 'black';
     ctx.fillRect(this.x * this.scl, this.y * this.scl, this.scl, this.scl);
   }
 }
