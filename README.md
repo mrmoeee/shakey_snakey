@@ -58,7 +58,7 @@ Random environment events :
 Asteroids falling from the sky, with particle effects, and collision detection, if it hits the head of the snake its instakill
 Colors of food will be switched randomly(?)
 ##### Weekend:
-- [ ] Finish basic snake game, simple movements on a canvas
+- [ ] Render Simple snake on a canvas, and move it around
 - [ ] Try adding an audio file, or read up on HTML5 web audio API
 - [ ]
 ##### DAY 1:
