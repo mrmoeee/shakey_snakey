@@ -86,51 +86,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/board.js":
-/*!**********************!*\
-  !*** ./src/board.js ***!
-  \**********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _snake_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./snake.js */ "./src/snake.js");
-/* harmony import */ var _snake_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_snake_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _snakeFood_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./snakeFood.js */ "./src/snakeFood.js");
-/* harmony import */ var _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_snakeFood_js__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-const canvas = document.getElementById('snake_canvas');
-const ctx = canvas.getContext("2d");
-const width = canvas.width;
-const height = canvas.height;
-const snake = new _snake_js__WEBPACK_IMPORTED_MODULE_0___default.a();
-const food = new _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default.a(width, height);
-let playing = true;
-
-class Board {
-
-  constructor() {
-    this.feedingGround = new Array(width/20);
-    for(let i = 0; i < width/20; i++) {
-      this.feedingGround[i] = new Array(width/20);
-    }
-  }
-
-}
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (Board);
-
-
-/***/ }),
-
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -144,8 +99,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _snake_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_snake_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _snakeFood_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./snakeFood.js */ "./src/snakeFood.js");
 /* harmony import */ var _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_snakeFood_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _board_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./board.js */ "./src/board.js");
-
 
 
 
@@ -153,12 +106,15 @@ const canvas = document.getElementById('snake_canvas');
 const ctx = canvas.getContext("2d");
 const width = canvas.width;
 const height = canvas.height;
+
 const snake = new _snake_js__WEBPACK_IMPORTED_MODULE_0___default.a();
-const food = new _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default.a(width, height);
-const board = new _board_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
+const food = new _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default.a(width, height, 'green');
+const food2 = new _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default.a(width, height, 'red');
+const food3 = new _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default.a(width, height, 'puprple');
 let playing = true;
 
 window.addEventListener('keydown', keyPressed);
+
 
 function randomSpawn() {
   const boundsW = Math.floor(width/snake.scl);
@@ -213,10 +169,8 @@ function wallCollision() {
 }
 
 function foodCollision() {
-
   let rect1 = snake;
   let rect2 = food;
-
   if ((((rect2.x > rect1.x)
       && (rect2.x < (rect1.x + rect1.width)))
       || (((rect2.x + rect2.width) > rect1.x)
@@ -225,15 +179,17 @@ function foodCollision() {
       && (rect2.y < (rect1.y + rect1.height)))
       || (((rect2.y + rect2.height) > rect1.y)
       && ((rect2.y + rect2.height) < (rect1.y + rect1.height))))) {
-        console.log('no collision');
     return false;
   } else {
-    console.log('collision');
     return true;
   }
 }
 
+function setup() {
+  randomSpawn();
+  spawnFood();
 
+}
 function draw() {
   //draw canvas
   ctx.fillStyle = 'white';
@@ -248,6 +204,8 @@ function draw() {
     console.log('yes');
   }
   food.show(ctx);
+  // food2.show(ctx);
+  // food3.show(ctx);
   snake.show(ctx);
   snake.update();
   if (playing) {
@@ -255,7 +213,7 @@ function draw() {
   }
 }
 
-// setup();
+setup();
 draw();
 
 
@@ -271,8 +229,8 @@ draw();
 
 class Snake {
   constructor() {
-    this.x = 10;
-    this.y = 10;
+    this.x = 0;
+    this.y = 0;
     this.xspeed = 1;
     this.yspeed = 0;
     this.scl = 20;
@@ -324,15 +282,11 @@ module.exports = Snake;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-const FOOD_COLORING = {
-  RED: 'red',
-  PURPLE: 'purple',
-  GREEN: 'green'
-};
+
 class SnakeFood {
   constructor(width, height, color) {
-    this.x = 15;
-    this.y = 15;
+    this.x = 0;
+    this.y = 0;
     this.width = 20;
     this.height = 20;
     this.color = color;

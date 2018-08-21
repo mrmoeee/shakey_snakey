@@ -1,12 +1,8 @@
-const FOOD_COLORING = {
-  RED: 'red',
-  PURPLE: 'purple',
-  GREEN: 'green'
-};
+
 class SnakeFood {
   constructor(width, height, color) {
-    this.x = 15;
-    this.y = 15;
+    this.x = 0;
+    this.y = 0;
     this.width = 20;
     this.height = 20;
     this.color = color;

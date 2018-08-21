@@ -1,17 +1,19 @@
 import Snake from './snake.js';
 import SnakeFood from './snakeFood.js';
-import Board from './board.js';
 
 const canvas = document.getElementById('snake_canvas');
 const ctx = canvas.getContext("2d");
 const width = canvas.width;
 const height = canvas.height;
+
 const snake = new Snake();
-const food = new SnakeFood(width, height);
-const board = new Board();
+const food = new SnakeFood(width, height, 'green');
+const food2 = new SnakeFood(width, height, 'red');
+const food3 = new SnakeFood(width, height, 'puprple');
 let playing = true;
 
 window.addEventListener('keydown', keyPressed);
+
 
 function randomSpawn() {
   const boundsW = Math.floor(width/snake.scl);
@@ -66,10 +68,8 @@ function wallCollision() {
 }
 
 function foodCollision() {
-
   let rect1 = snake;
   let rect2 = food;
-
   if ((((rect2.x > rect1.x)
       && (rect2.x < (rect1.x + rect1.width)))
       || (((rect2.x + rect2.width) > rect1.x)
@@ -78,15 +78,17 @@ function foodCollision() {
       && (rect2.y < (rect1.y + rect1.height)))
       || (((rect2.y + rect2.height) > rect1.y)
       && ((rect2.y + rect2.height) < (rect1.y + rect1.height))))) {
-        console.log('no collision');
     return false;
   } else {
-    console.log('collision');
     return true;
   }
 }
 
+function setup() {
+  randomSpawn();
+  spawnFood();
 
+}
 function draw() {
   //draw canvas
   ctx.fillStyle = 'white';
@@ -101,6 +103,8 @@ function draw() {
     console.log('yes');
   }
   food.show(ctx);
+  // food2.show(ctx);
+  // food3.show(ctx);
   snake.show(ctx);
   snake.update();
   if (playing) {
@@ -108,5 +112,5 @@ function draw() {
   }
 }
 
-// setup();
+setup();
 draw();
