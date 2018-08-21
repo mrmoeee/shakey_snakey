@@ -158,6 +158,8 @@ const food = new _snakeFood_js__WEBPACK_IMPORTED_MODULE_1___default.a(width, hei
 const board = new _board_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
 let playing = true;
 
+window.addEventListener('keydown', keyPressed);
+
 function randomSpawn() {
   const boundsW = Math.floor(width/snake.scl);
   const boundsH = Math.floor(height/snake.scl);
@@ -210,42 +212,27 @@ function wallCollision() {
   }
 }
 
-function diff(pos1, pos2) {
-  return {
-    dx: Math.abs(pos1.x - pos2.x),
-    dy: Math.abs(pos1.y - pos2.y)
-  };
-}
 function foodCollision() {
-  // const diffs = diff({x: snake.x, y: snake.y}, {x:food.x, y:food.y});
-  // if (diffs.dx < 1 && diffs.dy < 1) {
-  //   snake.size++;
-  //   return true;
-  // } else {
-  //   return false;
-  // }
+
   let rect1 = snake;
   let rect2 = food;
-  // console.log(rect1.height);
-  console.log('rect1', rect1, rect1.x, rect1.y, rect1.width, rect1.height);
-  console.log('rect2', rect2, rect2.x, rect2.y, rect2.width, rect2.height);
-  if ((rect1.x < (rect2.x + rect2.width)) &&
-   ((rect1.x + rect1.width) > rect2.x) &&
-   (rect1.y < (rect2.y + rect2.height)) &&
-   (rect1.y + (rect1.height > rect2.y))) {
-    // collision detected!
-    console.log('collision!');
+
+  if ((((rect2.x > rect1.x)
+      && (rect2.x < (rect1.x + rect1.width)))
+      || (((rect2.x + rect2.width) > rect1.x)
+      && ((rect2.x + rect2.width) < (rect1.x + rect1.width))))
+      || (((rect2.y > rect1.y)
+      && (rect2.y < (rect1.y + rect1.height)))
+      || (((rect2.y + rect2.height) > rect1.y)
+      && ((rect2.y + rect2.height) < (rect1.y + rect1.height))))) {
+        console.log('no collision');
+    return false;
   } else {
-    console.log('no collision');
+    console.log('collision');
+    return true;
   }
 }
 
-// board.createBoard();
-function setup() {
-  spawnFood(width, height, board);
-  randomSpawn(width, height);
-
-}
 
 function draw() {
   //draw canvas
@@ -255,23 +242,20 @@ function draw() {
     playing = !playing;
     console.log('collided with walls', snake.x, 'x', snake.y, 'y');
   }
-
-  // if (foodCollision(food)) {
-  //   spawnFood(width, height, board);
-  // }
+  if (foodCollision()) {
+    snake.size++;
+    spawnFood();
+    console.log('yes');
+  }
   food.show(ctx);
   snake.show(ctx);
-  snake.update(food);
-
+  snake.update();
   if (playing) {
     setTimeout(draw, 1000/10);
   }
-
 }
 
-foodCollision();
-setup();
-window.addEventListener('keydown', keyPressed);
+// setup();
 draw();
 
 
@@ -287,8 +271,8 @@ draw();
 
 class Snake {
   constructor() {
-    this.x = 12;
-    this.y = 12;
+    this.x = 10;
+    this.y = 10;
     this.xspeed = 1;
     this.yspeed = 0;
     this.scl = 20;
@@ -346,22 +330,19 @@ const FOOD_COLORING = {
   GREEN: 'green'
 };
 class SnakeFood {
-
-  constructor(width, height) {
+  constructor(width, height, color) {
     this.x = 15;
     this.y = 15;
     this.width = 20;
     this.height = 20;
-    this.color = FOOD_COLORING;
+    this.color = color;
     //type, color, size
   }
 
   show(ctx) {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(this.x * 20, this.y * 20, this.width + 10, this.height + 10);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x * 20, this.y* 20, this.width, this.height);
   }
-
-
 }
 
 module.exports = SnakeFood;

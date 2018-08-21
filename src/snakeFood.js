@@ -4,22 +4,19 @@ const FOOD_COLORING = {
   GREEN: 'green'
 };
 class SnakeFood {
-
-  constructor(width, height) {
+  constructor(width, height, color) {
     this.x = 15;
     this.y = 15;
     this.width = 20;
     this.height = 20;
-    this.color = FOOD_COLORING;
+    this.color = color;
     //type, color, size
   }
 
   show(ctx) {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(this.x * 20, this.y * 20, this.width + 10, this.height + 10);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x * 20, this.y* 20, this.width, this.height);
   }
-
-
 }
 
 module.exports = SnakeFood;
