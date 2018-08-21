@@ -159,44 +159,22 @@ const board = new _board_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
 let playing = true;
 
 function randomSpawn() {
-    let x = Math.floor(Math.random() * width/snake.scl);
-    let y = Math.floor(Math.random() * height/snake.scl);
-    snake.x = x;
-    snake.y = y;
-  }
+  const boundsW = Math.floor(width/snake.scl);
+  const boundsH = Math.floor(height/snake.scl);
+  let col = Math.floor(Math.random() * boundsW);
+  let row =  Math.floor(Math.random() * boundsH);
+  snake.x = col;
+  snake.y = row;
+}
 function spawnFood() {
-  let x = Math.floor(Math.random() * width/20);
-  let y = Math.floor(Math.random() * height/20);
-  food.x = x;
-  food.y = y;
-  board.feedingGround[food.x][food.y] = food;
-  console.log(board);
-}
-// board.createBoard();
-function setup() {
-  spawnFood(width, height, board);
-  randomSpawn(width, height);
-}
-
-function draw() {
-  //draw canvas
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, width, height);
-  if (snake.willCollideWall(canvas.width, canvas.height)) {
-    playing = !playing;
-    console.log('collided with walls', snake.x, 'x', snake.y, 'y');
-  } else {
-    snake.show(ctx);
-    snake.update();
-    food.show(ctx);
-
-    if (playing) {
-      setTimeout(draw, 1000/10);
-    }
-    if (snake.eatFood(food)) {
-      spawnFood(width, height, board);
-    }
-  }
+  const boundsW = Math.floor(width/20);
+  const boundsH = Math.floor(height/20);
+  let col = Math.floor(Math.random() * boundsW);
+  let row = Math.floor(Math.random() * boundsH);
+  food.x = col;
+  food.y = row;
+  //board still testin
+  // board.feedingGround[food.x][food.y] = food;
 }
 
 function keyPressed(e) {
@@ -216,6 +194,82 @@ function keyPressed(e) {
     }
   }
 }
+
+function wallCollision() {
+  const bounds = Math.floor(width/20);
+  if (snake.x >= bounds) {
+    return true;
+  } else if (snake.y >= bounds) {
+    return true;
+  } else if (snake.x < 0) {
+    return true;
+  } else if (snake.y < 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function diff(pos1, pos2) {
+  return {
+    dx: Math.abs(pos1.x - pos2.x),
+    dy: Math.abs(pos1.y - pos2.y)
+  };
+}
+function foodCollision() {
+  // const diffs = diff({x: snake.x, y: snake.y}, {x:food.x, y:food.y});
+  // if (diffs.dx < 1 && diffs.dy < 1) {
+  //   snake.size++;
+  //   return true;
+  // } else {
+  //   return false;
+  // }
+  let rect1 = snake;
+  let rect2 = food;
+  // console.log(rect1.height);
+  console.log('rect1', rect1, rect1.x, rect1.y, rect1.width, rect1.height);
+  console.log('rect2', rect2, rect2.x, rect2.y, rect2.width, rect2.height);
+  if ((rect1.x < (rect2.x + rect2.width)) &&
+   ((rect1.x + rect1.width) > rect2.x) &&
+   (rect1.y < (rect2.y + rect2.height)) &&
+   (rect1.y + (rect1.height > rect2.y))) {
+    // collision detected!
+    console.log('collision!');
+  } else {
+    console.log('no collision');
+  }
+}
+
+// board.createBoard();
+function setup() {
+  spawnFood(width, height, board);
+  randomSpawn(width, height);
+
+}
+
+function draw() {
+  //draw canvas
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, width, height);
+  if (wallCollision(canvas.width, canvas.height)) {
+    playing = !playing;
+    console.log('collided with walls', snake.x, 'x', snake.y, 'y');
+  }
+
+  // if (foodCollision(food)) {
+  //   spawnFood(width, height, board);
+  // }
+  food.show(ctx);
+  snake.show(ctx);
+  snake.update(food);
+
+  if (playing) {
+    setTimeout(draw, 1000/10);
+  }
+
+}
+
+foodCollision();
 setup();
 window.addEventListener('keydown', keyPressed);
 draw();
@@ -233,8 +287,8 @@ draw();
 
 class Snake {
   constructor() {
-    this.x = 0;
-    this.y = 0;
+    this.x = 12;
+    this.y = 12;
     this.xspeed = 1;
     this.yspeed = 0;
     this.scl = 20;
@@ -243,33 +297,6 @@ class Snake {
     //eatenfood technically is 1 for the snake head.
     this.size = 0;
     this.tail = [];
-  }
-
-  willCollideWall(width, height) {
-    const nextXMove = this.x + this.xspeed;
-    const nextYMove = this.y + this.yspeed;
-    console.log(this.x, 'x', this.y, 'y');
-    console.log(this.xspeed, 'xspeed', this.yspeed, 'yspeed');
-    if (this.x >= width/20) {
-      return true;
-    } else if (this.y >= width/20) {
-      return true;
-    } else if (this.x < 0) {
-      return true;
-    } else if (this.y < 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  //
-  eatFood(food) {
-    if ((this.x === food.x) && (this.y === food.y)) {
-      this.size++;
-      return true;
-    } else {
-      return false;
-    }
   }
 
   direction(x, y) {
@@ -321,15 +348,17 @@ const FOOD_COLORING = {
 class SnakeFood {
 
   constructor(width, height) {
-    this.x = 0;
-    this.y = 0;
+    this.x = 15;
+    this.y = 15;
+    this.width = 20;
+    this.height = 20;
     this.color = FOOD_COLORING;
     //type, color, size
   }
 
   show(ctx) {
     ctx.fillStyle = 'red';
-    ctx.fillRect(this.x * 20, this.y * 20, 20, 20);
+    ctx.fillRect(this.x * 20, this.y * 20, this.width + 10, this.height + 10);
   }
 
 

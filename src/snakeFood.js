@@ -6,15 +6,17 @@ const FOOD_COLORING = {
 class SnakeFood {
 
   constructor(width, height) {
-    this.x = 0;
-    this.y = 0;
+    this.x = 15;
+    this.y = 15;
+    this.width = 20;
+    this.height = 20;
     this.color = FOOD_COLORING;
     //type, color, size
   }
 
   show(ctx) {
     ctx.fillStyle = 'red';
-    ctx.fillRect(this.x * 20, this.y * 20, 20, 20);
+    ctx.fillRect(this.x * 20, this.y * 20, this.width + 10, this.height + 10);
   }
 
 

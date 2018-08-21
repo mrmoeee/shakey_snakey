@@ -1,8 +1,8 @@
 
 class Snake {
   constructor() {
-    this.x = 0;
-    this.y = 0;
+    this.x = 12;
+    this.y = 12;
     this.xspeed = 1;
     this.yspeed = 0;
     this.scl = 20;
@@ -11,33 +11,6 @@ class Snake {
     //eatenfood technically is 1 for the snake head.
     this.size = 0;
     this.tail = [];
-  }
-
-  willCollideWall(width, height) {
-    const nextXMove = this.x + this.xspeed;
-    const nextYMove = this.y + this.yspeed;
-    console.log(this.x, 'x', this.y, 'y');
-    console.log(this.xspeed, 'xspeed', this.yspeed, 'yspeed');
-    if (this.x >= width/20) {
-      return true;
-    } else if (this.y >= width/20) {
-      return true;
-    } else if (this.x < 0) {
-      return true;
-    } else if (this.y < 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  //
-  eatFood(food) {
-    if ((this.x === food.x) && (this.y === food.y)) {
-      this.size++;
-      return true;
-    } else {
-      return false;
-    }
   }
 
   direction(x, y) {
