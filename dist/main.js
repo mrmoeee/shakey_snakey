@@ -114,7 +114,7 @@ class FeedingGround {
     this.width = width;
     this.height = height;
     this.playing = true;
-    this.eaten = [];
+    this.alive = this.snake.alive;
   }
 
   generateGrounds() {
@@ -202,7 +202,7 @@ class FeedingGround {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       //width same as height so only pass in widght right now
       if (this.wallCollision(canvas.width)) {
-        this.playing = !this.playing;
+        this.playing = false;
         console.log('wall collision');
       }
 
@@ -210,23 +210,28 @@ class FeedingGround {
         let randomNum1 = Math.floor(Math.random() * this.snakeFood.length);
         this.snake.size++;
         this.spawnFood(this.snakeFood[0]);
-        this.eaten.push(this.snakeFood[0]);
       } else if (this.foodCollision(this.snakeFood[1])) {
         this.snake.size++;
         this.spawnFood(this.snakeFood[1]);
-        this.eaten.push(this.snakeFood[1]);
+        if (this.snake.eaten === '' || this.snake.eaten === 'purple'){
+          this.snake.eaten = this.snakeFood[1].color;
+        }
       } else if (this.foodCollision(this.snakeFood[2])) {
         this.snake.size++;
         this.spawnFood(this.snakeFood[2]);
-        this.eaten.push(this.snakeFood[2]);
+        if (this.snake.eaten === '') {
+          this.snake.eaten = this.snakeFood[2].color;
+        } else if (this.snake.eaten === 'red') {
+          this.snake.eaten = '';
+        }
       }
       this.render(ctx);
-      if (this.playing) {
-        setTimeout(startAnimation, 80);
+      if (this.playing === this.snake.alive) {
+        setTimeout(startAnimation, 100);
       }
-      console.log(this.eaten);
+      // console.log(this.snake.eaten);
+
     };
-    console.log('restarted');
     startAnimation();
   }
 
@@ -234,7 +239,13 @@ class FeedingGround {
     for (let i = 0; i < this.snakeFood.length; i++) {
       this.snakeFood[i].show(ctx);
     }
-    // this.snakeFood[0].show(ctx);
+    if (this.snake.isPoisoned()) {
+      this.snake.direction = this.snake.reverse;
+      // console.log("you're poisoned");
+    } else {
+      this.snake.direction = this.snake.reset;
+      // console.log("you're cured");
+    }
     this.snake.show(ctx);
     this.snake.update();
   }
@@ -284,6 +295,7 @@ function keyPressed(e) {
   } else if (code === 32) {
     fg.playing = !fg.playing;
   }
+
 }
 
 
@@ -306,19 +318,44 @@ class Snake {
     this.scl = 20;
     this.height = this.scl;
     this.width = this.scl;
-    //eatenfood technically is 1 for the snake head.
     this.size = 0;
     this.tail = [];
+    this.eaten = '';
+    this.alive = true;
+  }
+
+  isPoisoned() {
+    if (this.eaten === 'purple') {
+      this.direction = this.reverse;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  reset(x, y) {
+    this.xspeed = x;
+    this.yspeed = y;
   }
 
   direction(x, y) {
     this.xspeed = x;
     this.yspeed = y;
+
+  }
+
+  reverse(x, y) {
+    this.xspeed = -x;
+    this.yspeed = -y;
   }
 
   update() {
     for (let i = 0; i < this.tail.length - 1; i++) {
       this.tail[i] = this.tail[i + 1];
+      if (this.x === this.tail[i].x && this.y === this.tail[i].y) {
+        this.alive = false;
+        console.log('woah ran into self');
+      }
     }
     this.tail[this.size -1] = { x: this.x, y: this.y };
 

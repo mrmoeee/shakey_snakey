@@ -23,4 +23,5 @@ function keyPressed(e) {
   } else if (code === 32) {
     fg.playing = !fg.playing;
   }
+
 }
