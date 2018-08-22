@@ -13,7 +13,7 @@ class Snake {
     this.eaten = '';
     this.alive = true;
   }
-
+  //poisonous
   isPoisoned() {
     if (this.eaten === 'purple') {
       this.direction = this.reverse;
