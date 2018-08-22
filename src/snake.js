@@ -19,10 +19,8 @@ class Snake {
   }
 
   update() {
-    if (this.tail.length === this.size) {
-      for (let i = 0; i < this.tail.length - 1; i++) {
-        this.tail[i] = this.tail[i + 1];
-      }
+    for (let i = 0; i < this.tail.length - 1; i++) {
+      this.tail[i] = this.tail[i + 1];
     }
     this.tail[this.size -1] = { x: this.x, y: this.y };
 
