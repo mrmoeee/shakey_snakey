@@ -39,7 +39,7 @@ class Snake {
     this.yspeed = -y;
   }
 
-  update() {
+  update(ctx) {
     for (let i = 0; i < this.tail.length - 1; i++) {
       this.tail[i] = this.tail[i + 1];
       if (this.x === this.tail[i].x && this.y === this.tail[i].y) {
