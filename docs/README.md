@@ -1,9 +1,9 @@
-# SSSnake - Classic snake game with a twist
+# Shakey Snakey - Classic snake game with a twist
 ---
 ### Overview / Background
-SSSnake is an Object Oriented Programming Javascript implementation of the classic snake game with canvas.
+Shakey Snakey is an Object Oriented Programming Javascript implementation of the classic snake game with canvas.
 
-Canvas is a 2D drawing API that will allow for the drawing of board SSSnake will be playable on. As the game is being played on the canvas created,  collision with food will generate a sound, and visual event, whilst also having background music. Music will be mutable.
+Canvas is a 2D drawing API that will allow for the drawing of board Shakey Snakey will be playable on. As the game is being played on the canvas created,  collision with food will generate a sound, and visual event, whilst also having background music. Music will be mutable.
 
 There will be different types of food on the canvas that will generate different types of events or challenges players will have to overcome.
 
@@ -32,7 +32,7 @@ The snake head will have to avoid, but the snake body doesn't.
 ![](images/wireframe.png)
 
 ### Technologies
-SSSnake will be implemented using:
+Shakey Snakey will be implemented using:
 * JavaScript for implementing features, in-game events, and game logic
 * HTML5 Canvas for rendering the game
 * Webpack

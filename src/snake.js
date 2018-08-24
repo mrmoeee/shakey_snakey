@@ -74,10 +74,12 @@ class Snake {
 
   show(ctx) {
     ctx.fillStyle = '#b2ffe4';
-    for (let i = 0; i < this.tail.length; i++) {
-      let currTail = this.tail[i];
-      ctx.fillRect(currTail.x * this.scl, currTail.y *
-        this.scl, this.scl, this.scl);
+    if (this.tail.length > 1){
+      for (let i = 0; i < this.tail.length; i++) {
+        let currTail = this.tail[i];
+        ctx.fillRect(currTail.x * this.scl, currTail.y *
+          this.scl, this.scl, this.scl);
+      }
     }
     ctx.fillStyle = 'black';
     ctx.fillRect(this.x * this.scl, this.y * this.scl, this.scl, this.scl);

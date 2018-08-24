@@ -2,7 +2,6 @@ const COLORS = ['red', 'blue', 'yellow'];
 
 class Asteroid {
   constructor(options ={}) {
-    //all zeroes to be determined later
     this.x = options.x;
     this.y = options.y;
     this.xspeed = options.xspeed;

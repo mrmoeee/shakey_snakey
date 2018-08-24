@@ -97,7 +97,6 @@ const COLORS = ['red', 'blue', 'yellow'];
 
 class Asteroid {
   constructor(options ={}) {
-    //all zeroes to be determined later
     this.x = options.x;
     this.y = options.y;
     this.xspeed = options.xspeed;
@@ -442,6 +441,7 @@ reset.addEventListener('click', restart);
 
 function restart() {
   fg.snake.alive = true;
+  fg.snake.eaten = '';
   fg.playing = true;
   fg.start(canvas);
   reset.style.zIndex = -1;
@@ -554,10 +554,12 @@ class Snake {
 
   show(ctx) {
     ctx.fillStyle = '#b2ffe4';
-    for (let i = 0; i < this.tail.length; i++) {
-      let currTail = this.tail[i];
-      ctx.fillRect(currTail.x * this.scl, currTail.y *
-        this.scl, this.scl, this.scl);
+    if (this.tail.length > 1){
+      for (let i = 0; i < this.tail.length; i++) {
+        let currTail = this.tail[i];
+        ctx.fillRect(currTail.x * this.scl, currTail.y *
+          this.scl, this.scl, this.scl);
+      }
     }
     ctx.fillStyle = 'black';
     ctx.fillRect(this.x * this.scl, this.y * this.scl, this.scl, this.scl);

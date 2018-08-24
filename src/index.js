@@ -14,6 +14,7 @@ reset.addEventListener('click', restart);
 
 function restart() {
   fg.snake.alive = true;
+  fg.snake.eaten = '';
   fg.playing = true;
   fg.start(canvas);
   reset.style.zIndex = -1;
