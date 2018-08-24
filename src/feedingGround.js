@@ -29,11 +29,11 @@ class FeedingGround {
   }
 
   randomXspeed() {
-    return Math.random() * 30;
+    return Math.random() * 10;
   }
 
   randomYspeed() {
-    return Math.random() * 30;
+    return Math.random() * 10;
   }
 
   topAsteroidSpawn() {
@@ -41,7 +41,6 @@ class FeedingGround {
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new Asteroid({x: this.randomX(), y: -this.randomY(), xspeed: 0, yspeed: this.randomYspeed(), radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > currAstro.radius) {
         this.asteroids.push(currAstro);
         prevAstro = currAstro;
@@ -54,13 +53,11 @@ class FeedingGround {
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new Asteroid({x: -this.randomX(), y: this.randomY(), xspeed: this.randomXspeed(), yspeed: 0, radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > 50) {
         this.asteroidsL.push(currAstro);
         prevAstro = currAstro;
       }
     }
-    console.log(this.asteroidsL, 'leftastro');
   }
 
   rightAsteroidSpawn() {
@@ -68,13 +65,11 @@ class FeedingGround {
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new Asteroid({x: this.randomX() + 500, y: this.randomY() , xspeed: -this.randomXspeed(), yspeed: 0, radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > 50) {
         this.asteroidsL.push(currAstro);
         prevAstro = currAstro;
       }
     }
-    console.log(this.asteroidsL, 'leftastro');
   }
 
   botAsteroidSpawn() {
@@ -82,13 +77,11 @@ class FeedingGround {
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new Asteroid({x: this.randomX(), y: this.randomY() + 500 , xspeed: 0, yspeed: -this.randomYspeed(), radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > 50) {
         this.asteroidsL.push(currAstro);
         prevAstro = currAstro;
       }
     }
-    console.log(this.asteroidsL, 'leftastro');
   }
 
   randomSpawn() {
@@ -155,9 +148,9 @@ class FeedingGround {
       return true;
     } else if (this.snake.y >= bounds) {
       return true;
-    } else if (this.snake.x < 0) {
+    } else if (this.snake.x < -0.5) {
       return true;
-    } else if (this.snake.y < 0) {
+    } else if (this.snake.y < -0.5) {
       return true;
     } else {
       return false;
@@ -167,24 +160,15 @@ class FeedingGround {
   foodCollision(food) {
     let rect1 = this.snake;
     let rect2 = food;
-    if (this.snake.x === food.x && this.snake.y === food.y) {
-      return true;
-    } else {
-      return false;
-    }
-    // if ((((rect2.x > rect1.x)
-    //     && (rect2.x < (rect1.x + rect1.width)))
-    //     || (((rect2.x + rect2.width) > rect1.x)
-    //     && ((rect2.x + rect2.width) < (rect1.x + rect1.width))))
-    //     || (((rect2.y > rect1.y)
-    //     && (rect2.y < (rect1.y + rect1.height)))
-    //     || (((rect2.y + rect2.height) > rect1.y)
-    //     && ((rect2.y + rect2.height) < (rect1.y + rect1.height))))) {
-    //   return false;
-    // } else {
-    //   return true;
-    // }
+
+    if ((Math.abs(rect1.x - rect2.x) <= 0.5)
+        && (Math.abs(rect1.y - rect2.y) <= 0.5)) {
+          return true;
+      } else {
+        return false;
+      }
   }
+
 
   setup() {
     this.randomSpawn();
@@ -197,22 +181,22 @@ class FeedingGround {
     let looped = 1;
     let score = document.getElementById('scores');
     const animationLoop = () => {
+      let start = null;
       looped += 1;
-      if (looped === 60) {
+      if (looped === 100) {
         this.topAsteroidSpawn();
 
-      } else if (looped === 120) {
-        this.leftAsteroidSpawn();
       } else if (looped === 160) {
+        this.leftAsteroidSpawn();
+      } else if (looped === 220) {
         this.rightAsteroidSpawn();
-      } else if (looped === 200) {
+      } else if (looped === 280) {
         this.botAsteroidSpawn();
         looped = 0;
       }
 
       ctx.fillStyle = 'beige';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      //width same as height so only pass in widght right now
       if (this.wallCollision(canvas.width)) {
         this.playing = false;
         console.log('wall collision!!');
@@ -242,13 +226,16 @@ class FeedingGround {
         }
       }
       this.render(ctx);
-      if (this.playing === this.snake.alive) {
+      if (this.snake.alive === this.playing) {
         window.requestAnimationFrame(animationLoop);
+      } else {
+        let reset = document.getElementById('reset-box');
+        reset.style.zIndex = 1;
       }
+    
       this.asteroidGenerator(ctx);
       score.innerHTML = `Score: ${this.score}`;
-      ctx.fillStyle = 'red';
-      ctx.fillText(`Score: ${this.score}`, 450, 450, 80);
+      
     };
     animationLoop();
   }
@@ -257,7 +244,7 @@ class FeedingGround {
     for (let i = 0; i < this.snakeFood.length; i++) {
       this.snakeFood[i].show(ctx);
     }
-    
+
     if (this.snake.isPoisoned()) {
       this.snake.direction = this.snake.reverse;
     } else {

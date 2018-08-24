@@ -69,6 +69,25 @@ canvas {
   border: 1px solid black;
   border-radius: 3px;
   display: block;
+  z-index: 1;
+}
+
+
+.reset-button-box {
+  position: absolute;
+  z-index: -1;
+}
+.button-on {
+  font-size: 40px;
+  padding: 40px;
+  background: darkslategrey;
+  border-radius: 40px;
+  outline: none; 
+  border: none;
+  color: white;
+}
+.button-on:hover {
+  cursor: pointer;
 }
 
 * {

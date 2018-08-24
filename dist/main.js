@@ -181,11 +181,11 @@ class FeedingGround {
   }
 
   randomXspeed() {
-    return Math.random() * 30;
+    return Math.random() * 10;
   }
 
   randomYspeed() {
-    return Math.random() * 30;
+    return Math.random() * 10;
   }
 
   topAsteroidSpawn() {
@@ -193,7 +193,6 @@ class FeedingGround {
     let prevAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: this.randomX(), y: -this.randomY(), xspeed: 0, yspeed: this.randomYspeed(), radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > currAstro.radius) {
         this.asteroids.push(currAstro);
         prevAstro = currAstro;
@@ -206,13 +205,11 @@ class FeedingGround {
     let prevAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: -this.randomX(), y: this.randomY(), xspeed: this.randomXspeed(), yspeed: 0, radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > 50) {
         this.asteroidsL.push(currAstro);
         prevAstro = currAstro;
       }
     }
-    console.log(this.asteroidsL, 'leftastro');
   }
 
   rightAsteroidSpawn() {
@@ -220,13 +217,11 @@ class FeedingGround {
     let prevAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: this.randomX() + 500, y: this.randomY() , xspeed: -this.randomXspeed(), yspeed: 0, radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > 50) {
         this.asteroidsL.push(currAstro);
         prevAstro = currAstro;
       }
     }
-    console.log(this.asteroidsL, 'leftastro');
   }
 
   botAsteroidSpawn() {
@@ -234,13 +229,11 @@ class FeedingGround {
     let prevAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
     for ( let i = 0; i < 11; i++) {
       let currAstro = new _asteroids_js__WEBPACK_IMPORTED_MODULE_2___default.a({x: this.randomX(), y: this.randomY() + 500 , xspeed: 0, yspeed: -this.randomYspeed(), radius: 30});
-      console.log(currAstro);
       if (Math.abs(currAstro.x - prevAstro.x) > 50) {
         this.asteroidsL.push(currAstro);
         prevAstro = currAstro;
       }
     }
-    console.log(this.asteroidsL, 'leftastro');
   }
 
   randomSpawn() {
@@ -307,9 +300,9 @@ class FeedingGround {
       return true;
     } else if (this.snake.y >= bounds) {
       return true;
-    } else if (this.snake.x < 0) {
+    } else if (this.snake.x < -0.5) {
       return true;
-    } else if (this.snake.y < 0) {
+    } else if (this.snake.y < -0.5) {
       return true;
     } else {
       return false;
@@ -319,24 +312,15 @@ class FeedingGround {
   foodCollision(food) {
     let rect1 = this.snake;
     let rect2 = food;
-    if (this.snake.x === food.x && this.snake.y === food.y) {
-      return true;
-    } else {
-      return false;
-    }
-    // if ((((rect2.x > rect1.x)
-    //     && (rect2.x < (rect1.x + rect1.width)))
-    //     || (((rect2.x + rect2.width) > rect1.x)
-    //     && ((rect2.x + rect2.width) < (rect1.x + rect1.width))))
-    //     || (((rect2.y > rect1.y)
-    //     && (rect2.y < (rect1.y + rect1.height)))
-    //     || (((rect2.y + rect2.height) > rect1.y)
-    //     && ((rect2.y + rect2.height) < (rect1.y + rect1.height))))) {
-    //   return false;
-    // } else {
-    //   return true;
-    // }
+
+    if ((Math.abs(rect1.x - rect2.x) <= 0.5)
+        && (Math.abs(rect1.y - rect2.y) <= 0.5)) {
+          return true;
+      } else {
+        return false;
+      }
   }
+
 
   setup() {
     this.randomSpawn();
@@ -349,22 +333,22 @@ class FeedingGround {
     let looped = 1;
     let score = document.getElementById('scores');
     const animationLoop = () => {
+      let start = null;
       looped += 1;
-      if (looped === 60) {
+      if (looped === 100) {
         this.topAsteroidSpawn();
 
-      } else if (looped === 120) {
-        this.leftAsteroidSpawn();
       } else if (looped === 160) {
+        this.leftAsteroidSpawn();
+      } else if (looped === 220) {
         this.rightAsteroidSpawn();
-      } else if (looped === 200) {
+      } else if (looped === 280) {
         this.botAsteroidSpawn();
         looped = 0;
       }
 
       ctx.fillStyle = 'beige';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      //width same as height so only pass in widght right now
       if (this.wallCollision(canvas.width)) {
         this.playing = false;
         console.log('wall collision!!');
@@ -394,13 +378,16 @@ class FeedingGround {
         }
       }
       this.render(ctx);
-      if (this.playing === this.snake.alive) {
+      if (this.snake.alive === this.playing) {
         window.requestAnimationFrame(animationLoop);
+      } else {
+        let reset = document.getElementById('reset-box');
+        reset.style.zIndex = 1;
       }
+    
       this.asteroidGenerator(ctx);
       score.innerHTML = `Score: ${this.score}`;
-      ctx.fillStyle = 'red';
-      ctx.fillText(`Score: ${this.score}`, 450, 450, 80);
+      
     };
     animationLoop();
   }
@@ -409,7 +396,7 @@ class FeedingGround {
     for (let i = 0; i < this.snakeFood.length; i++) {
       this.snakeFood[i].show(ctx);
     }
-    
+
     if (this.snake.isPoisoned()) {
       this.snake.direction = this.snake.reverse;
     } else {
@@ -445,8 +432,19 @@ __webpack_require__.r(__webpack_exports__);
 
 const canvas = document.getElementById('snake_canvas');
 const fg = new _feedingGround_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas.width, canvas.height);
+const reset = document.getElementById('reset-box');
+
 if (fg.playing){
   fg.start(canvas);
+} 
+
+reset.addEventListener('click', restart);
+
+function restart() {
+  fg.snake.alive = true;
+  fg.playing = true;
+  fg.start(canvas);
+  reset.style.zIndex = -1;
 }
 
 window.addEventListener('keydown', keyPressed);
@@ -455,20 +453,19 @@ function keyPressed(e) {
   let code = e.keyCode;
   if (code === 37) {
     fg.snake.move = 'left';
-    fg.snake.direction(-1, 0, 'left');
+    fg.snake.direction(-0.3, 0, 'left');
   } else if (code === 38) {
     fg.snake.move = 'up';
-    fg.snake.direction(0, -1, 'up');
+    fg.snake.direction(0, -0.3, 'up');
   } else if (code === 39) {
     fg.snake.move = 'right';
-    fg.snake.direction(1, 0, 'right');
+    fg.snake.direction(0.3, 0, 'right');
   } else if (code === 40) {
     fg.snake.move = 'down';
-    fg.snake.direction(0, 1, 'down');
+    fg.snake.direction(0, 0.3, 'down');
   } else if (code === 32) {
     fg.playing = !fg.playing;
   }
-
 }
 
 
@@ -486,7 +483,7 @@ class Snake {
   constructor() {
     this.x = 0;
     this.y = 0;
-    this.xspeed = 1;
+    this.xspeed = 0.5;
     this.yspeed = 0;
     this.scl = 20;
     this.height = this.scl;
@@ -497,7 +494,6 @@ class Snake {
     this.alive = true;
     this.move = '';
   }
-  //poisonous
   isPoisoned() {
     if (this.eaten === 'purple') {
       this.direction = this.reverse;
@@ -568,6 +564,7 @@ class Snake {
   }
 }
 
+
 module.exports = Snake;
 
 
@@ -594,7 +591,7 @@ class SnakeFood {
 
   show(ctx) {
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x * 20, this.y* 20, this.width, this.height);
+    ctx.fillRect(this.x * 20, this.y * 20, this.width, this.height);
   }
 }
 

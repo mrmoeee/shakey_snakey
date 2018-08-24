@@ -3,7 +3,7 @@ class Snake {
   constructor() {
     this.x = 0;
     this.y = 0;
-    this.xspeed = 1;
+    this.xspeed = 0.5;
     this.yspeed = 0;
     this.scl = 20;
     this.height = this.scl;
@@ -14,7 +14,6 @@ class Snake {
     this.alive = true;
     this.move = '';
   }
-  //poisonous
   isPoisoned() {
     if (this.eaten === 'purple') {
       this.direction = this.reverse;
@@ -84,5 +83,6 @@ class Snake {
     ctx.fillRect(this.x * this.scl, this.y * this.scl, this.scl, this.scl);
   }
 }
+
 
 module.exports = Snake;

@@ -12,7 +12,7 @@ class SnakeFood {
 
   show(ctx) {
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x * 20, this.y* 20, this.width, this.height);
+    ctx.fillRect(this.x * 20, this.y * 20, this.width, this.height);
   }
 }
 
