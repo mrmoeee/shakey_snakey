@@ -12,6 +12,7 @@ class Snake {
     this.tail = [];
     this.eaten = '';
     this.alive = true;
+    this.move = '';
   }
   //poisonous
   isPoisoned() {
@@ -23,15 +24,34 @@ class Snake {
     }
   }
 
-  reset(x, y) {
-    this.xspeed = x;
-    this.yspeed = y;
+  reversePrevention(x, y) {
+    if (this.x === 1 && x === -1) {
+      console.log('going backwards x plane');
+    } else if (this.x === -1 && x === 1) {
+      console.log('going backward the other way!');
+    }
+  }
+
+  reset(x, y, direct) {
+    console.log(direct)
+    if (this.move === 'left') {
+      this.xspeed = x;
+      this.yspeed = y;
+    } else if (this.move === 'right') {
+      this.xspeed = x;
+      this.yspeed = y;
+    } else if (this.move === 'up') {
+      this.xspeed = x; 
+      this.yspeed = y;
+    } else if (this.move === 'down') {
+      this.xspeed = x;
+      this.yspeed = y;
+    }
   }
 
   direction(x, y) {
-    this.xspeed = x;
+    this.xspeed = x; 
     this.yspeed = y;
-
   }
 
   reverse(x, y) {
@@ -60,7 +80,6 @@ class Snake {
       ctx.fillRect(currTail.x * this.scl, currTail.y *
         this.scl, this.scl, this.scl);
     }
-    // ctx.fillStyle = '#00b273';
     ctx.fillStyle = 'black';
     ctx.fillRect(this.x * this.scl, this.y * this.scl, this.scl, this.scl);
   }

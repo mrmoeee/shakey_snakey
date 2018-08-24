@@ -35,6 +35,7 @@ class FeedingGround {
   randomYspeed() {
     return Math.random() * 30;
   }
+
   topAsteroidSpawn() {
     this.asteroids = [];
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
@@ -47,6 +48,7 @@ class FeedingGround {
       }
     }
   }
+
   leftAsteroidSpawn() {
     this.asteroidsL = [];
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
@@ -60,6 +62,7 @@ class FeedingGround {
     }
     console.log(this.asteroidsL, 'leftastro');
   }
+
   rightAsteroidSpawn() {
     this.asteroidsR = [];
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
@@ -73,6 +76,7 @@ class FeedingGround {
     }
     console.log(this.asteroidsL, 'leftastro');
   }
+
   botAsteroidSpawn() {
     this.asteroidsB = [];
     let prevAstro = new Asteroid({x: 0, y: 0, xspeed: 0, yspeed: 0, radius: 0});
@@ -85,12 +89,6 @@ class FeedingGround {
       }
     }
     console.log(this.asteroidsL, 'leftastro');
-  }
-  generateGrounds() {
-    this.grounds = new Array(this.width/20);
-    for(let i = 0; i < this.width/20; i++) {
-      this.grounds[i] = new Array(this.width/20);
-    }
   }
 
   randomSpawn() {
@@ -111,8 +109,35 @@ class FeedingGround {
     this.spawnFood(this.snakeFood[randomNum3]);
   }
 
-  asteroidGenerator() {
+  asteroidGenerator(ctx) {
+    this.asteroids.forEach(asteroid => {
+      asteroid.show(ctx);
+    });
 
+    this.asteroids.forEach(asteroid => {
+      asteroid.update();
+    });
+    this.asteroidsL.forEach(asteroid => {
+      asteroid.show(ctx);
+    });
+
+    this.asteroidsL.forEach(asteroid => {
+      asteroid.update(ctx);
+    });
+    this.asteroidsR.forEach(asteroid => {
+      asteroid.show(ctx);
+    });
+
+    this.asteroidsR.forEach(asteroid => {
+      asteroid.update(ctx);
+    });
+    this.asteroidsB.forEach(asteroid => {
+      asteroid.show(ctx);
+    });
+
+    this.asteroidsB.forEach(asteroid => {
+      asteroid.update(ctx);
+    });
   }
 
   spawnFood(food) {
@@ -168,13 +193,11 @@ class FeedingGround {
 
   start(canvas) {
     const ctx = canvas.getContext('2d');
-    const grid = this.generateGrounds();
     this.setup();
     let looped = 1;
     let score = document.getElementById('scores');
     const animationLoop = () => {
       looped += 1;
-      console.log(looped);
       if (looped === 60) {
         this.topAsteroidSpawn();
 
@@ -192,7 +215,7 @@ class FeedingGround {
       //width same as height so only pass in widght right now
       if (this.wallCollision(canvas.width)) {
         this.playing = false;
-        console.log('wall collision');
+        console.log('wall collision!!');
       }
 
       if (this.foodCollision(this.snakeFood[0])) {
@@ -220,37 +243,9 @@ class FeedingGround {
       }
       this.render(ctx);
       if (this.playing === this.snake.alive) {
-        setTimeout(animationLoop, 100);
+        window.requestAnimationFrame(animationLoop);
       }
-      this.asteroids.forEach(asteroid => {
-        asteroid.show(ctx);
-      });
-
-      this.asteroids.forEach(asteroid => {
-        asteroid.update();
-      });
-      // console.log(this.snake.eaten);
-      this.asteroidsL.forEach(asteroid => {
-        asteroid.show(ctx);
-      });
-
-      this.asteroidsL.forEach(asteroid => {
-        asteroid.update(ctx);
-      });
-      this.asteroidsR.forEach(asteroid => {
-        asteroid.show(ctx);
-      });
-
-      this.asteroidsR.forEach(asteroid => {
-        asteroid.update(ctx);
-      });
-      this.asteroidsB.forEach(asteroid => {
-        asteroid.show(ctx);
-      });
-
-      this.asteroidsB.forEach(asteroid => {
-        asteroid.update(ctx);
-      });
+      this.asteroidGenerator(ctx);
       score.innerHTML = `Score: ${this.score}`;
       ctx.fillStyle = 'red';
       ctx.fillText(`Score: ${this.score}`, 450, 450, 80);
@@ -262,21 +257,13 @@ class FeedingGround {
     for (let i = 0; i < this.snakeFood.length; i++) {
       this.snakeFood[i].show(ctx);
     }
-    // for (let i = 0; i < this.asteroids.length; i++) {
-    //   this.asteroids[i].show(ctx);
-    //   // this.asteroids[i].update();
-    // }
-
+    
     if (this.snake.isPoisoned()) {
       this.snake.direction = this.snake.reverse;
-      // console.log("you're poisoned");
     } else {
       this.snake.direction = this.snake.reset;
-      // console.log("you're cured");
     }
     this.snake.show(ctx);
-    // this.asteroids.show(ctx);
-    // this.asteroids.update();
     this.snake.update(ctx);
   }
 }
