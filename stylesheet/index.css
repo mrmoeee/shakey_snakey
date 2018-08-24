@@ -1,9 +1,74 @@
-body {
-  background: bisque;
+
+.nav-bar-container {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Oxygen';
 }
 
+.score-box {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.title-container {
+  font-size: 48px;
+  font-family: 'Oxygen';
+  padding: 5px;
+  margin: 30px auto;
+	background: linear-gradient(to right, #009900 0%, #b2ffb2 95%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+}
+
+.links-container {
+  margin-left: 328px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.linkedin {
+  padding: 5px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+.github {
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+.image {
+  width: 20px;
+  height: 20px;
+}
+.image2 {
+  width: 20px;
+  height: 20px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  background: linear-gradient(to right, #FDFBFB, #EBEDEE 70%);
+}
+
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 canvas {
-  border: 1px solid black; display: block; margin: 0 auto;
+  border: 1px solid black;
+  border-radius: 3px;
+  display: block;
 }
 
 * {

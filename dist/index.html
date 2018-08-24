@@ -4,11 +4,29 @@
 
     <meta charset="utf-8">
     <title>SSSnake</title>
-    
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../stylesheet/index.css">
   </head>
   <body>
-    <canvas id="snake_canvas" width="500" height="500"></canvas>
+    <div class='title-container'>
+      SNAKE SNAKE
+    </div>
+    <div class="nav-bar-container">
+      <div id="scores" class="score-box">
+        Score:
+      </div>
+      <div class='links-container'>
+        <div class='linkedin'>
+          <a href="http://www.github.com/mrmoeee" title="Linkedin"><img class='image2' src='../images/lin2.png'/></a>
+        </div>
+        <div class='github'>
+          <a href="http://www.github.com/mrmoeee" title="GitHub"><img class='image' src='../images/glogo.png'/></a>
+        </div>
+      </div>
+    </div>
+    <div class='canvas-container'>
+      <canvas id="snake_canvas" width="500" height="500"></canvas>
+    </div>
     <script src="main.js"></script>
 
   </body>

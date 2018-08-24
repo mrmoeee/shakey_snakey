@@ -7,9 +7,9 @@ class FeedingGround {
   constructor(width, height) {
     this.snake = new Snake();
     this.snakeFood = [
-      new SnakeFood(20, 20, 'green'),
-      new SnakeFood(20, 20, 'red'),
-      new SnakeFood(20, 20, 'purple')
+      new SnakeFood(20, 20, 'green', 10),
+      new SnakeFood(20, 20, 'red', 40),
+      new SnakeFood(20, 20, 'purple', 100)
     ];
     this.width = width;
     this.height = height;
@@ -19,6 +19,7 @@ class FeedingGround {
     this.asteroidsL = [];
     this.asteroidsR = [];
     this.asteroidsB = [];
+    this.score = 0;
   }
   randomX() {
     return Math.random() * 500;
@@ -170,6 +171,7 @@ class FeedingGround {
     const grid = this.generateGrounds();
     this.setup();
     let looped = 1;
+    let score = document.getElementById('scores');
     const animationLoop = () => {
       looped += 1;
       console.log(looped);
@@ -196,9 +198,11 @@ class FeedingGround {
       if (this.foodCollision(this.snakeFood[0])) {
         let randomNum1 = Math.floor(Math.random() * this.snakeFood.length);
         this.snake.size++;
+        this.score += this.snakeFood[0].score;
         this.spawnFood(this.snakeFood[0]);
       } else if (this.foodCollision(this.snakeFood[1])) {
         this.snake.size++;
+        this.score += this.snakeFood[1].score;
         this.spawnFood(this.snakeFood[1]);
         if (this.snake.eaten === '' || this.snake.eaten === 'purple'){
           this.snake.eaten = this.snakeFood[1].color;
@@ -208,7 +212,9 @@ class FeedingGround {
         this.spawnFood(this.snakeFood[2]);
         if (this.snake.eaten === '') {
           this.snake.eaten = this.snakeFood[2].color;
+          this.score += this.snakeFood[2].score;
         } else if (this.snake.eaten === 'red') {
+          this.score = this.score + this.snakeFood[2].score + this.snakeFood[1].score + 20;
           this.snake.eaten = '';
         }
       }
@@ -245,7 +251,9 @@ class FeedingGround {
       this.asteroidsB.forEach(asteroid => {
         asteroid.update(ctx);
       });
-
+      score.innerHTML = `Score: ${this.score}`;
+      ctx.fillStyle = 'red';
+      ctx.fillText(`Score: ${this.score}`, 450, 450, 80);
     };
     animationLoop();
   }
