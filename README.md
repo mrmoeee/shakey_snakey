@@ -1,7 +1,7 @@
 
 # Shakey Snakey
 
-###[Live Link](https://mrmoeee.github.io/shakey_snakey/)
+### [Live Link](https://mrmoeee.github.io/shakey_snakey/)
 
 Features a snake game, with poison/antidote food interactions between two types of Snake Food Objects, and random obfuscations.
 
